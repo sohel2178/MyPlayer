@@ -168,7 +168,7 @@ public class MyPlayerActivity extends AppCompatActivity implements MinuteListene
 
         AppPreference.getInstance(this).increaseCounter();
 
-        if(AppPreference.getInstance(this).getCounter()>=15){
+        if(AppPreference.getInstance(this).getCounter()>=45){
 
             runOnUiThread(new Runnable() {
                 @Override

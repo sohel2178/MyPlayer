@@ -18,7 +18,7 @@ public class MyThread extends Thread {
         while (isrunning){
 
             try {
-                sleep(5000);
+                sleep(60000);
                 listener.increment();
             } catch (InterruptedException e) {
                 e.printStackTrace();
