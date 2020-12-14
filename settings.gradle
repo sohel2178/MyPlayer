@@ -1,0 +1,3 @@
+include ':app:myPlayer'
+include ':app'
+rootProject.name = "MyPlayer"
