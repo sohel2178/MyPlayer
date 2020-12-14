@@ -23,7 +23,7 @@ public class MyPlayerActivity extends AppCompatActivity implements MinuteListene
 
     private SimpleExoPlayer player;
 
-    private String url = "http://103.91.144.230/ftpdata/Movies/AMINATION_MOVIE/2000_2010/An%20Extremely%20Goofy%20Movie%20%282000%29/An.Extremely.Goofy.Movie.2000.1080p.WEBRip.x264-%5BYTS.AM%5D.mp4";
+
 
     private boolean playWhenReady = true;
     private int currentWindow = 0;
@@ -33,7 +33,10 @@ public class MyPlayerActivity extends AppCompatActivity implements MinuteListene
 
     private InterstitialAd mInterstitialAd;
 
-    private int counter;
+    private String videoUrl;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,14 +45,13 @@ public class MyPlayerActivity extends AppCompatActivity implements MinuteListene
         setContentView(R.layout.activity_my_player);
         playerView = findViewById(R.id.player_view);
 
-        Log.d("MYThread",Thread.currentThread().getName());
+        this.videoUrl = getIntent().getStringExtra("VIDEO_URL");
 
-        this.counter = AppPreference.getInstance(this).getCounter();
 
         if(mInterstitialAd==null){
             mInterstitialAd = new InterstitialAd(this);
         }
-        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        mInterstitialAd.setAdUnitId(getString(R.string.inter_ad_id));
         mInterstitialAd.loadAd(new AdRequest.Builder().build());
 
 
@@ -84,7 +86,7 @@ public class MyPlayerActivity extends AppCompatActivity implements MinuteListene
     private void initialize(){
         player = new SimpleExoPlayer.Builder(this).build();
         playerView.setPlayer(player);
-        MediaItem mediaItem = MediaItem.fromUri(url);
+        MediaItem mediaItem = MediaItem.fromUri(videoUrl);
         player.setMediaItem(mediaItem);
         player.setPlayWhenReady(playWhenReady);
         player.seekTo(currentWindow, playbackPosition);
