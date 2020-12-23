@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
 
     Button button ;
 
-    private String url = "http://103.91.144.230/ftpdata/Movies/AMINATION_MOVIE/2000_2010/An%20Extremely%20Goofy%20Movie%20%282000%29/An.Extremely.Goofy.Movie.2000.1080p.WEBRip.x264-%5BYTS.AM%5D.mp4";
+    private String url = "http://www.freemediabd.com/ftpdata1/Animation/1996-Aladdin.And.The.King.Of.Thieves.mp4";
 
 
 

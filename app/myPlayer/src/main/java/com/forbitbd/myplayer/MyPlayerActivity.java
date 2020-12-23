@@ -3,15 +3,16 @@ package com.forbitbd.myplayer;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.View;
+import android.view.WindowInsets;
+import android.view.WindowInsetsController;
+import android.view.WindowManager;
 
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ui.PlayerView;
-import com.google.android.exoplayer2.util.Log;
 import com.google.android.exoplayer2.util.Util;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -42,6 +43,18 @@ public class MyPlayerActivity extends AppCompatActivity implements MinuteListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            final WindowInsetsController insetsController = getWindow().getInsetsController();
+            if (insetsController != null) {
+                insetsController.hide(WindowInsets.Type.statusBars());
+            }
+        } else {
+            getWindow().setFlags(
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN
+            );
+        }
+
         setContentView(R.layout.activity_my_player);
         playerView = findViewById(R.id.player_view);
 
@@ -68,6 +81,7 @@ public class MyPlayerActivity extends AppCompatActivity implements MinuteListene
                 super.onAdClosed();
                 mInterstitialAd.loadAd(new AdRequest.Builder().build());
                 AppPreference.getInstance(getApplicationContext()).resetCounter();
+                AppPreference.getInstance(getApplicationContext()).resetBackCounter();
             }
 
             @Override
@@ -97,7 +111,12 @@ public class MyPlayerActivity extends AppCompatActivity implements MinuteListene
     @Override
     protected void onStart() {
         super.onStart();
-        myThread.startThread();
+
+        if(myThread.isAlive()){
+            myThread.startThread();
+        }
+
+
         if(Util.SDK_INT>=24){
             initialize();
         }
@@ -168,7 +187,7 @@ public class MyPlayerActivity extends AppCompatActivity implements MinuteListene
 
         AppPreference.getInstance(this).increaseCounter();
 
-        if(AppPreference.getInstance(this).getCounter()>=45){
+        if(AppPreference.getInstance(this).getCounter()>=30){
 
             runOnUiThread(new Runnable() {
                 @Override
@@ -180,6 +199,19 @@ public class MyPlayerActivity extends AppCompatActivity implements MinuteListene
 
         }
 
+
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        AppPreference.getInstance(this).increaseBackCounter();
+
+        if(AppPreference.getInstance(this).getBackCounter()>3){
+            showInterAd();
+        }else {
+            super.onBackPressed();
+        }
 
     }
 }

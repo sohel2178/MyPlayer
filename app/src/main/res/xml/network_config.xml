@@ -3,5 +3,6 @@
     <domain-config cleartextTrafficPermitted="true">
 
         <domain includeSubdomains="true">103.91.144.230</domain>
+        <domain includeSubdomains="true">www.freemediabd.com</domain>
     </domain-config>
 </network-security-config>

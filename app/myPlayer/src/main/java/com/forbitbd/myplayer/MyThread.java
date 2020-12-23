@@ -1,6 +1,5 @@
 package com.forbitbd.myplayer;
 
-import android.util.Log;
 
 public class MyThread extends Thread {
 
@@ -13,7 +12,6 @@ public class MyThread extends Thread {
 
     @Override
     public void run() {
-        Log.d("TTTTTTT",Thread.currentThread().getName());
 
         while (isrunning){
 

@@ -7,6 +7,7 @@ public class AppPreference {
 
     private static final String SP_NAME ="AppPreference";
     private static final String COUNTER ="COUNTER";
+    private static final String BACK_COUNTER ="BACK_COUNTER";
 
     private SharedPreferences userLocalDatabase;
 
@@ -37,5 +38,20 @@ public class AppPreference {
 
     public void resetCounter(){
         userLocalDatabase.edit().putInt(COUNTER,0).apply();
+    }
+
+
+    public void increaseBackCounter(){
+        int prev = userLocalDatabase.getInt(BACK_COUNTER,0);
+        prev++;
+        userLocalDatabase.edit().putInt(BACK_COUNTER,prev).apply();
+    }
+
+    public int getBackCounter(){
+        return userLocalDatabase.getInt(BACK_COUNTER,0);
+    }
+
+    public void resetBackCounter(){
+        userLocalDatabase.edit().putInt(BACK_COUNTER,0).apply();
     }
 }
