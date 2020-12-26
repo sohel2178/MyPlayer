@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.forbitbd.myplayer.fullScreen.FullScreenPlayerActivity;
+import com.forbitbd.myplayer.rtmp.RTMPPlayerActivity;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ui.PlayerView;
@@ -31,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),MyPlayerActivity.class);
+                Intent intent = new Intent(getApplicationContext(), FullScreenPlayerActivity.class);
                 intent.putExtra("VIDEO_URL",url);
                 startActivity(intent);
             }

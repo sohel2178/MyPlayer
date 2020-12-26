@@ -1,4 +1,4 @@
 <resources>
-    <string name="inter_ad_id">ca-app-pub-3940256099942544/1033173712</string>
-<!--    <string name="inter_ad_id">ca-app-pub-5474497946967422/7084678714</string> Original-->
+<!--    <string name="inter_ad_id">ca-app-pub-3940256099942544/1033173712</string> Test-->
+        <string name="inter_ad_id">ca-app-pub-5474497946967422/7084678714</string>
 </resources>
