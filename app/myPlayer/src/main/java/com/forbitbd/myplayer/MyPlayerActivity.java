@@ -178,6 +178,7 @@ public class MyPlayerActivity extends AppCompatActivity implements MinuteListene
             mInterstitialAd.show();
         }else{
             AppPreference.getInstance(this).increaseCounter();
+            super.onBackPressed();
         }
     }
 
