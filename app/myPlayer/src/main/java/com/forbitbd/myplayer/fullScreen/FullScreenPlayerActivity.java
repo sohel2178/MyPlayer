@@ -1,6 +1,7 @@
 package com.forbitbd.myplayer.fullScreen;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
 import android.annotation.SuppressLint;
@@ -9,15 +10,19 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.forbitbd.myplayer.AppPreference;
 import com.forbitbd.myplayer.MyThread;
 import com.forbitbd.myplayer.R;
+import com.forbitbd.myplayer.models.Movie;
+import com.forbitbd.myplayer.utils.Constant;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.util.Util;
 import com.google.android.gms.ads.InterstitialAd;
+import com.squareup.picasso.Picasso;
 
 public class FullScreenPlayerActivity extends AppCompatActivity {
 
@@ -31,20 +36,29 @@ public class FullScreenPlayerActivity extends AppCompatActivity {
     private int currentWindow = 0;
     private long playbackPosition = 0;
 
-    private String videoUrl;
+    private Movie movie;
 
     boolean fullscreen = false;
 
     private ImageView fullscreenButton;
+
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_full_screen_player);
 
+        this.movie = (Movie) getIntent().getSerializableExtra(Constant.MOVIE);
+
+        setupToolbar(R.id.toolbar);
+        getSupportActionBar().setTitle(movie.getTitle());
+        
+        initView();
+
         playerView = findViewById(R.id.player);
         fullscreenButton = playerView.findViewById(R.id.exo_fullscreen_icon);
-        this.videoUrl = getIntent().getStringExtra("VIDEO_URL");
+        
 
         fullscreenButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,7 +72,7 @@ public class FullScreenPlayerActivity extends AppCompatActivity {
                     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                     RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) playerView.getLayoutParams();
                     params.width = params.MATCH_PARENT;
-                    params.height = (int) ( 200 * getApplicationContext().getResources().getDisplayMetrics().density);
+                    params.height = (int) ( 250 * getApplicationContext().getResources().getDisplayMetrics().density);
                     playerView.setLayoutParams(params);
                     fullscreen = false;
                 }else{
@@ -81,11 +95,48 @@ public class FullScreenPlayerActivity extends AppCompatActivity {
         });
     }
 
+    private void initView() {
+        ImageView ivImage = findViewById(R.id.image);
+        TextView tvTitle = findViewById(R.id.title);
+        TextView tvCategory = findViewById(R.id.category);
+        TextView tvYear = findViewById(R.id.year);
+        TextView tvLanguage = findViewById(R.id.language);
+        TextView tvIMDBRating = findViewById(R.id.imdb_rating);
+        TextView tvPlayTime = findViewById(R.id.play_time);
+        TextView tvViews = findViewById(R.id.views);
+        TextView tvDescription = findViewById(R.id.description);
+
+        if(movie.getImage_url()!=null && !movie.getImage_url().equals("")){
+            Picasso.get().load(movie.getImage_url()).into(ivImage);
+        }
+
+
+
+        tvTitle.setText(movie.getTitle());
+        tvCategory.setText(movie.getCategory().getName());
+        tvYear.setText(movie.getRelease_date().split("-")[0]);
+        tvLanguage.setText(movie.getLanguage());
+        tvIMDBRating.setText(movie.getImdb_rating());
+        tvPlayTime.setText(movie.getPlay_time());
+        tvViews.setText(String.valueOf(movie.getViews()));
+        tvDescription.setText(movie.getDescription());
+
+
+    }
+
+    public void setupToolbar(int id) {
+        toolbar = (Toolbar) findViewById(id);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+    }
+
 
     private void initialize(){
         player = new SimpleExoPlayer.Builder(this).build();
         playerView.setPlayer(player);
-        MediaItem mediaItem = MediaItem.fromUri(videoUrl);
+        MediaItem mediaItem = MediaItem.fromUri(movie.getVideo_url());
         player.setMediaItem(mediaItem);
         player.setPlayWhenReady(playWhenReady);
         player.seekTo(currentWindow, playbackPosition);
