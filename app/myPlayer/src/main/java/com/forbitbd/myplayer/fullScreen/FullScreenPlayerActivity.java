@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.forbitbd.myplayer.AppPreference;
+import com.forbitbd.myplayer.MinuteListener;
 import com.forbitbd.myplayer.MyThread;
 import com.forbitbd.myplayer.R;
 import com.forbitbd.myplayer.models.Movie;
@@ -21,10 +22,12 @@ import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.util.Util;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.squareup.picasso.Picasso;
 
-public class FullScreenPlayerActivity extends AppCompatActivity {
+public class FullScreenPlayerActivity extends AppCompatActivity implements MinuteListener {
 
     PlayerView playerView;
 
@@ -44,6 +47,9 @@ public class FullScreenPlayerActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
 
+    private MyThread myThread;
+    private InterstitialAd mInterstitialAd;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,8 +64,6 @@ public class FullScreenPlayerActivity extends AppCompatActivity {
 
         playerView = findViewById(R.id.player);
         fullscreenButton = playerView.findViewById(R.id.exo_fullscreen_icon);
-        
-
         fullscreenButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,6 +97,40 @@ public class FullScreenPlayerActivity extends AppCompatActivity {
 
             }
         });
+
+
+        if(mInterstitialAd==null){
+            mInterstitialAd = new InterstitialAd(this);
+        }
+        mInterstitialAd.setAdUnitId(getString(R.string.inter_ad_id));
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+
+
+
+
+        mInterstitialAd.setAdListener(new AdListener(){
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+            }
+
+            @Override
+            public void onAdClosed() {
+                super.onAdClosed();
+                mInterstitialAd.loadAd(new AdRequest.Builder().build());
+                AppPreference.getInstance(getApplicationContext()).resetCounter();
+                AppPreference.getInstance(getApplicationContext()).resetBackCounter();
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                super.onAdLeftApplication();
+            }
+        });
+
+
+
+        myThread = new MyThread(this);
     }
 
     private void initView() {
@@ -130,6 +168,12 @@ public class FullScreenPlayerActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 
 
@@ -147,6 +191,10 @@ public class FullScreenPlayerActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+        if(myThread.isAlive()){
+            myThread.startThread();
+        }
 
         if(Util.SDK_INT>=24){
             initialize();
@@ -203,7 +251,43 @@ public class FullScreenPlayerActivity extends AppCompatActivity {
 
     }
 
+    public void showInterAd(){
+        if(mInterstitialAd.isLoaded()){
+            mInterstitialAd.show();
+        }else{
+            AppPreference.getInstance(this).increaseCounter();
+            super.onBackPressed();
+        }
+    }
 
 
+    @Override
+    public void increment() {
+        AppPreference.getInstance(this).increaseCounter();
 
+        if(AppPreference.getInstance(this).getCounter()>=30){
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    showInterAd();
+                }
+            });
+
+
+        }
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        AppPreference.getInstance(this).increaseBackCounter();
+
+        if(AppPreference.getInstance(this).getBackCounter()>3){
+            showInterAd();
+        }else {
+            super.onBackPressed();
+        }
+
+    }
 }
