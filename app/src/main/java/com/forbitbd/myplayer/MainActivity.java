@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         movie.setTitle("Dino King: Journey to Fire Mountain");
         movie.setDescription("Speckles, a ferocious tarbosaurus and his young son junior, mourning the loss of their family in an epic battle, roam the lands in search of food, adventure and peace. Under the watchful eye of his dad, Junior is growing up healthy and strong, but with an overconfidence thanks to his young age. After one encounter results in Junior being kidnapped, Speckles embarks on an adventure to the ends of earth to find his son. Encountering friend and foe, ally and enemy, Speckles will stop at nothing and will take on all corners to save his offspring.");
         movie.setImage_url("http://103.91.144.230/Admin/main/images/tt7659018/poster/w6N6xJvvjY6pLxOnHz5yu9Z8quG.jpg");
-        movie.setVideo_url("http://103.91.144.230/ftpdata/Movies/AMINATION_MOVIE/2019/13-11-19/Dino%20King%203D%20Journey%20to%20Fire%20Mountain%20%282019%29/Dino.King.Journey.To.Fire.Mountain.2019.DUBBED.1080p.WEBRip.x264-RARBG.mp4");
+        movie.setVideo_url("http://fs.ebox.live/Movies/3D%20Movies/2015/The%20Hunger%20Games%3A%20Mockingjay%20-%20Part%202%20[2015]/The.Hunger.Games-Mockingjay.Part.2.2015__3D.1080p__E-BOX.mp4");
         movie.setRelease_date("2018-12-25");
         movie.setPlay_time("01 H 30 M");
         movie.setLanguage("English");

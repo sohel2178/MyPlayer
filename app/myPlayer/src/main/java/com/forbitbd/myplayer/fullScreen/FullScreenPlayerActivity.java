@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat;
 
 import android.annotation.SuppressLint;
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,7 +21,12 @@ import com.forbitbd.myplayer.models.Movie;
 import com.forbitbd.myplayer.utils.Constant;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.source.DefaultMediaSourceFactory;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -180,8 +186,19 @@ public class FullScreenPlayerActivity extends AppCompatActivity implements Minut
     private void initialize(){
         player = new SimpleExoPlayer.Builder(this).build();
         playerView.setPlayer(player);
+
+        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(
+                this,
+                Util.getUserAgent(this, "exoplayer"));
+/*
+        ProgressiveMediaSource mediaSource = new ProgressiveMediaSource.Factory(dataSourceFactory)
+                .createMediaSource(Uri.parse("file:///android_asset/jellyfish-3-mbps-hd-h264.mkv"));*/
+
+        MediaSource videoSource = new DefaultMediaSourceFactory(dataSourceFactory)
+                .createMediaSource(MediaItem.fromUri(Uri.parse(movie.getVideo_url())));
+
         MediaItem mediaItem = MediaItem.fromUri(movie.getVideo_url());
-        player.setMediaItem(mediaItem);
+        player.setMediaSource(videoSource);
         player.setPlayWhenReady(playWhenReady);
         player.seekTo(currentWindow, playbackPosition);
         player.prepare();

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
     <domain-config cleartextTrafficPermitted="true">
-
+        <domain includeSubdomains="true">fs.ebox.live</domain>
         <domain includeSubdomains="true">139.59.37.195</domain>
         <domain includeSubdomains="true">103.91.144.230</domain>
         <domain includeSubdomains="true">www.freemediabd.com</domain>
+        <domain includeSubdomains="true">43.230.123.18</domain>
+
     </domain-config>
 </network-security-config>
