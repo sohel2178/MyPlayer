@@ -13,6 +13,7 @@
         android:layout_height="250dp"
         app:controller_layout_id="@layout/exo_playback_control_view"
         android:background="#000000"
+        app:show_buffering="always"
         android:id="@+id/player"/>
 
     <LinearLayout
