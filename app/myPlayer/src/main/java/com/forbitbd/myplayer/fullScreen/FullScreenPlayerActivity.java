@@ -108,7 +108,10 @@ public class FullScreenPlayerActivity extends AppCompatActivity implements Minut
         if(mInterstitialAd==null){
             mInterstitialAd = new InterstitialAd(this);
         }
+
+
         mInterstitialAd.setAdUnitId(getString(R.string.inter_ad_id));
+//        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
         mInterstitialAd.loadAd(new AdRequest.Builder().build());
 
 
