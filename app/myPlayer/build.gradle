@@ -31,6 +31,7 @@ android {
 repositories {
     google()
     jcenter()
+
 }
 
 dependencies {
@@ -48,5 +49,6 @@ dependencies {
     implementation 'com.google.android.exoplayer:extension-rtmp:2.12.2'
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'com.squareup.picasso:picasso:2.71828'
-    implementation 'com.google.android.gms:play-services-ads:19.6.0'
+    implementation 'com.smaato.android.sdk:smaato-sdk:21.5.7'
+    implementation 'com.smaato.android.sdk:smaato-sdk-interstitial:21.5.7'
 }

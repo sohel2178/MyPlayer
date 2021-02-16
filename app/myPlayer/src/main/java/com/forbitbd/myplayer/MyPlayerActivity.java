@@ -14,9 +14,7 @@ import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.util.Util;
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.InterstitialAd;
+
 
 public class MyPlayerActivity extends AppCompatActivity implements MinuteListener{
 
@@ -32,7 +30,7 @@ public class MyPlayerActivity extends AppCompatActivity implements MinuteListene
 
     private MyThread myThread;
 
-    private InterstitialAd mInterstitialAd;
+
 
     private String videoUrl;
 
@@ -61,34 +59,7 @@ public class MyPlayerActivity extends AppCompatActivity implements MinuteListene
         this.videoUrl = getIntent().getStringExtra("VIDEO_URL");
 
 
-        if(mInterstitialAd==null){
-            mInterstitialAd = new InterstitialAd(this);
-        }
-        mInterstitialAd.setAdUnitId(getString(R.string.inter_ad_id));
-        mInterstitialAd.loadAd(new AdRequest.Builder().build());
 
-
-
-
-        mInterstitialAd.setAdListener(new AdListener(){
-            @Override
-            public void onAdLoaded() {
-                super.onAdLoaded();
-            }
-
-            @Override
-            public void onAdClosed() {
-                super.onAdClosed();
-                mInterstitialAd.loadAd(new AdRequest.Builder().build());
-                AppPreference.getInstance(getApplicationContext()).resetCounter();
-                AppPreference.getInstance(getApplicationContext()).resetBackCounter();
-            }
-
-            @Override
-            public void onAdLeftApplication() {
-                super.onAdLeftApplication();
-            }
-        });
 
 
 
@@ -174,12 +145,7 @@ public class MyPlayerActivity extends AppCompatActivity implements MinuteListene
     }
 
     public void showInterAd(){
-        if(mInterstitialAd.isLoaded()){
-            mInterstitialAd.show();
-        }else{
-            AppPreference.getInstance(this).increaseCounter();
-            super.onBackPressed();
-        }
+
     }
 
 
