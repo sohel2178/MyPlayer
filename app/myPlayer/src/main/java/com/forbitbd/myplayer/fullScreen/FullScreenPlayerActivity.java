@@ -172,8 +172,8 @@ public class FullScreenPlayerActivity extends AppCompatActivity implements Minut
     }
 
     private void loadAd(){
-        //Interstitial.loadAd(getString(R.string.inter_ad_space_id), eventListener);
-        Interstitial.loadAd("130626426", eventListener);
+        Interstitial.loadAd(getString(R.string.inter_ad_space_id), eventListener);
+        //Interstitial.loadAd("130626426", eventListener);
     }
 
     private void initView() {
