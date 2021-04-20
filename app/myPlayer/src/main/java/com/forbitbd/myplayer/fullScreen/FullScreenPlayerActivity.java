@@ -1,6 +1,6 @@
 package com.forbitbd.myplayer.fullScreen;
 
-import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -15,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.forbitbd.myadnetwork.ui.FullScreenAdListener;
+import com.forbitbd.myadnetwork.ui.InterstitialAd;
 import com.forbitbd.myplayer.AppPreference;
 import com.forbitbd.myplayer.MinuteListener;
 import com.forbitbd.myplayer.MyThread;
@@ -29,11 +31,6 @@ import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
-import com.smaato.sdk.interstitial.EventListener;
-import com.smaato.sdk.interstitial.Interstitial;
-import com.smaato.sdk.interstitial.InterstitialAd;
-import com.smaato.sdk.interstitial.InterstitialError;
-import com.smaato.sdk.interstitial.InterstitialRequestError;
 import com.squareup.picasso.Picasso;
 
 public class FullScreenPlayerActivity extends AppCompatActivity implements MinuteListener {
@@ -58,69 +55,34 @@ public class FullScreenPlayerActivity extends AppCompatActivity implements Minut
 
     private MyThread myThread;
 
-    private InterstitialAd mInterstitialAd;
+    private InterstitialAd interstitialAd;
 
-    EventListener eventListener = new EventListener() {
+    private FullScreenAdListener listener= new FullScreenAdListener() {
         @Override
-        //show interstitial ad when it loaded successfully
-        public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
-            mInterstitialAd = interstitialAd;
-            mInterstitialAd.setBackgroundColor(0xff123456);
-
-            Log.d("YYYYY","onAdLoaded Called");
+        public void onLoaded() {
+            Log.d("HHHH","Ad Loaded");
         }
 
         @Override
-        // interstitial ad failed to load
-        public void onAdFailedToLoad(@NonNull InterstitialRequestError interstitialRequestError) {
-            Log.d("YYYYY","onAdFailedToLoad Called"+interstitialRequestError.getInterstitialError().toString());
-            loadAd();
+        public void onFailed(String s) {
+            Log.d("HHHH","Ad onFailed");
         }
 
         @Override
-        // interstitial ad had an unexpected error
-        public void onAdError(@NonNull InterstitialAd interstitialAd, @NonNull InterstitialError interstitialError) {
-            Log.d("YYYYY","onAdError Called");
-        }
-
-        @Override
-        // interstitial ad opened and was shown successfully
-        public void onAdOpened(@NonNull InterstitialAd interstitialAd) {
-            Log.d("YYYYY","onAdOpened Called");
-        }
-
-        @Override
-        // interstitial ad was closed by the user
-        public void onAdClosed(@NonNull InterstitialAd interstitialAd) {
-            Log.d("YYYYY","onAdClosed Called");
-            loadAd();
-            AppPreference.getInstance(getApplicationContext()).resetCounter();
-            AppPreference.getInstance(getApplicationContext()).resetBackCounter();
-        }
-
-        @Override
-        // interstitial ad was clicked by the user
-        public void onAdClicked(@NonNull InterstitialAd interstitialAd) {
-            Log.d("YYYYY","onAdClicked Called");
-        }
-
-        @Override
-        // interstitial ad was viewed by the user
-        public void onAdImpression(@NonNull InterstitialAd interstitialAd) {
-            Log.d("YYYYY","onAdClicked Called");
-        }
-
-        @Override
-        // interstitial ad Time to Live expired
-        public void onAdTTLExpired(@NonNull InterstitialAd interstitialAd) {
-            Log.d("YYYYY","onAdTTLExpired Called");
+        public void onClosed() {
+            Log.d("HHHH","Ad onClosed");
         }
     };
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_full_screen_player);
+        interstitialAd = new InterstitialAd(this);
+
+
 
         this.movie = (Movie) getIntent().getSerializableExtra(Constant.MOVIE);
 
@@ -172,8 +134,9 @@ public class FullScreenPlayerActivity extends AppCompatActivity implements Minut
     }
 
     private void loadAd(){
-        Interstitial.loadAd(getString(R.string.inter_ad_space_id), eventListener);
+        //Interstitial.loadAd(getString(R.string.inter_ad_space_id), eventListener);
         //Interstitial.loadAd("130626426", eventListener);
+        interstitialAd.loadInterstitialAd("hjkdf","jhjhkjhk");
     }
 
     private void initView() {
@@ -306,12 +269,15 @@ public class FullScreenPlayerActivity extends AppCompatActivity implements Minut
     }
 
     public void showInterAd(){
-        if(mInterstitialAd!=null && mInterstitialAd.isAvailableForPresentation()){
-            mInterstitialAd.showAd(this);
+        if(interstitialAd.isLoaded()){
+            interstitialAd.showAd();
         }else{
             AppPreference.getInstance(this).increaseCounter();
             super.onBackPressed();
         }
+//        if(mInterstitialAd!=null && mInterstitialAd.isAvailableForPresentation()){
+//            mInterstitialAd.showAd(this);
+//        }
 
     }
 
