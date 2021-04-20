@@ -8,9 +8,13 @@ import androidx.core.content.ContextCompat;
 import android.annotation.SuppressLint;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowInsets;
+import android.view.WindowInsetsController;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -71,6 +75,9 @@ public class FullScreenPlayerActivity extends AppCompatActivity implements Minut
         @Override
         public void onClosed() {
             Log.d("HHHH","Ad onClosed");
+            AppPreference.getInstance(getApplicationContext()).resetBackCounter();
+            hideStatusBar();
+            loadAd();
         }
     };
 
@@ -81,6 +88,7 @@ public class FullScreenPlayerActivity extends AppCompatActivity implements Minut
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_full_screen_player);
         interstitialAd = new InterstitialAd(this);
+        interstitialAd.setAdListener(listener);
 
 
 
@@ -137,6 +145,20 @@ public class FullScreenPlayerActivity extends AppCompatActivity implements Minut
         //Interstitial.loadAd(getString(R.string.inter_ad_space_id), eventListener);
         //Interstitial.loadAd("130626426", eventListener);
         interstitialAd.loadInterstitialAd("hjkdf","jhjhkjhk");
+    }
+
+    private void hideStatusBar(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            final WindowInsetsController insetsController = getWindow().getInsetsController();
+            if (insetsController != null) {
+                insetsController.hide(WindowInsets.Type.statusBars());
+            }
+        } else {
+            getWindow().setFlags(
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN
+            );
+        }
     }
 
     private void initView() {

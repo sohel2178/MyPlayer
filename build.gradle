@@ -20,6 +20,7 @@ allprojects {
             url "https://s3.amazonaws.com/smaato-sdk-releases/"
         }
         maven { url 'https://jitpack.io' }
+
     }
 }
 
