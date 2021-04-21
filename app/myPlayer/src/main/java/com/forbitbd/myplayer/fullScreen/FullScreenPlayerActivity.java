@@ -74,7 +74,6 @@ public class FullScreenPlayerActivity extends AppCompatActivity implements Minut
 
         @Override
         public void onClosed() {
-            Log.d("HHHH","Ad onClosed");
             AppPreference.getInstance(getApplicationContext()).resetBackCounter();
             hideStatusBar();
             loadAd();
@@ -297,9 +296,6 @@ public class FullScreenPlayerActivity extends AppCompatActivity implements Minut
             AppPreference.getInstance(this).increaseCounter();
             super.onBackPressed();
         }
-//        if(mInterstitialAd!=null && mInterstitialAd.isAvailableForPresentation()){
-//            mInterstitialAd.showAd(this);
-//        }
 
     }
 
